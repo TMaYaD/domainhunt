@@ -13,10 +13,12 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem 'active_attr'
 gem 'haml-rails'
 gem 'inherited_resources'
 gem 'jquery-rails'
 gem 'pg'
+gem 'redis'
 gem 'simple_form'
 gem 'unicorn'
 

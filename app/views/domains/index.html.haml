@@ -22,13 +22,13 @@
 
   - @domains.each do |domain|
     %tr
-      %td= domain.name
+      %td= domain.id
       %td= domain.min_bid
       %td= domain.release_date
       %td= domain.end_date
       %td= domain.status
       %td= link_to 'Show', domain
-      %td= link_to 'Edit', edit_domain_path(domain)
+      %td= link_to 'Edit', edit_domain_path(domain.id)
       %td= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' }
 
 %br
