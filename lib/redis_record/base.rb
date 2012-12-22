@@ -48,6 +48,8 @@ module RedisRecord::Base
       REDIS.keys("#{model_name}:*").map { |key| find_by_key key }
     end
 
+    delegate :count, :first, :last, :to => :all
+
     def find_or_initialize_by_id(id)
       find(id) || self.new(:id => id)
     end

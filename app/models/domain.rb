@@ -32,7 +32,9 @@ private
     when 'Pre-release'
       CSV.foreach(path, headers: %w[id release_date min_bid_with_unit], &block)
     when 'Auction'
-      CSV.foreach(path, headers: %w[id end_date], &block)
+      ActiveAttr::Typecasting::DateTimeTypecaster.with_date_format do
+        CSV.foreach(path, headers: %w[id end_date], &block)
+      end
       self.find('DomainName').destroy
     when 'Pending-delete'
       CSV.foreach(path, headers: %w[id], &block)
