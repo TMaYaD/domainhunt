@@ -2,7 +2,7 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name
+    = f.input :name, as: :file
     = f.input :min_bid
     = f.input :release_date
     = f.input :status, :collection => Domain::STATUS_LIST

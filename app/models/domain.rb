@@ -7,4 +7,8 @@ class Domain < ActiveRecord::Base
                     :uniqueness => true
   validates :status,  :presence => true,
                       :inclusion => { :in => STATUS_LIST }
+
+  def self.import(status, file)
+    # TODO: Import domains from the file, parse the CSV and save records
+  end
 end

@@ -1,6 +1,15 @@
+- content_for :aside do
+  .well
+    %h3 Import Domains
+    = form_tag import_domains_path, multipart: true do |f|
+      = label_tag :status
+      = select_tag :status, options_from_collection_for_select(Domain::STATUS_LIST, 'to_s', 'to_s')
+      = file_field_tag :file
+      = submit_tag 'Import'
+
 %h1 Listing domains
 
-%table
+%table.table.table-striped
   %tr
     %th Name
     %th Min bid
