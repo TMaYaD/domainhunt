@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @domain.name
+%p
+  %b Min bid:
+  = @domain.min_bid
+%p
+  %b Release date:
+  = @domain.release_date
+%p
+  %b Status:
+  = @domain.status
+
+= link_to 'Edit', edit_domain_path(@domain)
+\|
+= link_to 'Back', domains_path

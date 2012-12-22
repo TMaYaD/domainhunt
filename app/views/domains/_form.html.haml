@@ -1,0 +1,11 @@
+= simple_form_for(@domain) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :min_bid
+    = f.input :release_date
+    = f.input :status, :collection => Domain::STATUS_LIST
+
+  .form-actions
+    = f.button :submit

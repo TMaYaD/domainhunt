@@ -1,0 +1,25 @@
+%h1 Listing domains
+
+%table
+  %tr
+    %th Name
+    %th Min bid
+    %th Release date
+    %th Status
+    %th
+    %th
+    %th
+
+  - @domains.each do |domain|
+    %tr
+      %td= domain.name
+      %td= domain.min_bid
+      %td= domain.release_date
+      %td= domain.status
+      %td= link_to 'Show', domain
+      %td= link_to 'Edit', edit_domain_path(domain)
+      %td= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' }
+
+%br
+
+= link_to 'New Domain', new_domain_path
