@@ -11,6 +11,19 @@ end
 
 module DomainHunt
   class Application < Rails::Application
+
+    config.generators do |g|
+      g.orm :active_record
+      g.stylesheets false
+      g.helper false
+      g.test_framework  :rspec,
+                        :fixture          => true,
+                        :helper_specs     => false,
+                        :controller_specs => false,
+                        :view_specs       => false
+      g.fixture_replacement :factory_girl, :dir => "spec/factories"
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -58,5 +71,8 @@ module DomainHunt
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Do not initialize when compiling assets
+    config.assets.initialize_on_precompile = false
   end
 end
