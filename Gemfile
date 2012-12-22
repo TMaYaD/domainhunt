@@ -30,6 +30,7 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'guard-unicorn'
   gem 'pry-rails'
+  gem 'pry-remote'
   gem 'rspec-rails'
 end
 

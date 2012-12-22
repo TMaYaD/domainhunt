@@ -1,0 +1,10 @@
+domain-1.com,2012-12-22,$69
+domain-2.com,2012-12-22,$69
+domain-3.com,2012-12-22,$69
+domain-4.com,2012-12-22,$69
+domain-5.com,2012-12-22,$69
+domain-6.com,2012-12-22,$69
+domain-7.com,2012-12-22,$500
+domain-8.com,2012-12-22,$69
+domain-9.com,2012-12-22,$69
+domain-0.com,2012-12-22,$69
