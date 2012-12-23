@@ -19,7 +19,6 @@ module DomainHunt
   class Application < Rails::Application
 
     config.generators do |g|
-      g.orm :active_record
       g.stylesheets false
       g.helper false
       g.test_framework  :rspec,
@@ -27,7 +26,7 @@ module DomainHunt
                         :helper_specs     => false,
                         :controller_specs => false,
                         :view_specs       => false
-      g.fixture_replacement :factory_girl, :dir => "spec/factories"
+# g.fixture_replacement :factory_girl, :dir => "spec/factories"
     end
 
     # Settings in config/environments/* take precedence over those specified here.
