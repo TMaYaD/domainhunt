@@ -15,8 +15,8 @@ class Domain < RedisRecord
   validates :status,  :presence => true,
                       :inclusion => { :in => STATUS_LIST }
 
-  def self.import(status, file)
-    parse_records(file.path, status) do |row|
+  def self.import(status, path)
+    parse_records(path, status) do |row|
       domain = find_or_initialize_by_id row['id']
       domain.update_attributes row.to_hash.merge(status: status)
     end

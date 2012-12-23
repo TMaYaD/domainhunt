@@ -31,6 +31,10 @@
 
     .container-fluid
       .row-fluid
+        - flash.each do |name, msg|
+          = content_tag :div, "<a class='close' data-dismiss='alert'>×</a>".html_safe + msg, :id => "flash_#{name}", :class => [:alert, "alert-#{name}"] if msg.is_a?(String)
+
+      .row-fluid
         - if content_for? :aside
           %aside.span3
             = yield :aside

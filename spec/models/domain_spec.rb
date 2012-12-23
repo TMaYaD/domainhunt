@@ -7,7 +7,7 @@ describe Domain do
   it { should ensure_inclusion_of(:status).in_array Domain::STATUS_LIST }
 
   it "should import pre release domains" do
-    file = File.new Rails.root.join('spec', 'fixtures', 'PreRelease.txt'), 'r'
+    file = fixture 'PreRelease.txt'
     expect {
       Domain.import 'Pre-release', file
     }.to change{Domain.all.count}.by(10)
@@ -15,14 +15,14 @@ describe Domain do
   end
 
   it "should import standard auctions" do
-    file = File.new Rails.root.join('spec', 'fixtures', 'StandardAuctions.csv'), 'r'
+    file = fixture 'StandardAuctions.csv'
     expect {
       Domain.import 'Auction', file
     }.to change{Domain.all.count}.by(15)
   end
 
   it "should import domains pending delete" do
-    file = File.new Rails.root.join('spec', 'fixtures', '12-22-2012.txt'), 'r'
+    file = fixture '12-22-2012.txt'
     expect {
       Domain.import 'Pending-delete', file
     }.to change{Domain.all.count}.by(5)
