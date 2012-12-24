@@ -26,7 +26,6 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'foreman'
   gem 'guard'
-    gem 'rb-inotify'
   gem 'guard-bundler'
   gem 'guard-livereload'
   gem 'guard-rspec'
