@@ -1,5 +1,16 @@
 module RedisRecord::Base
   module ClassMethods
+
+    def scoped(*args)
+      RedisScope.new self, *args
+    end
+
+    delegate :limit, :to => :scoped
+
+    def create(*args)
+      new(*args).save
+    end
+
     def find(id)
       find_by_key key id
     end
@@ -10,7 +21,7 @@ module RedisRecord::Base
     end
 
     def all
-      filter_ids.map { |id| find id }
+      filter
     end
 
     def filter(offset=0, length= -1 - offset)

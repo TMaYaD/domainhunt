@@ -10,7 +10,7 @@ describe Domain do
     file = fixture 'PreRelease.txt'
     expect {
       Domain.import 'Pre-release', file
-    }.to change{Domain.all.count}.by(10)
+    }.to change{Domain.count}.by(10)
     Domain.last.min_bid.should eq 69
   end
 
@@ -18,13 +18,23 @@ describe Domain do
     file = fixture 'StandardAuctions.csv'
     expect {
       Domain.import 'Auction', file
-    }.to change{Domain.all.count}.by(15)
+    }.to change{Domain.count}.by(15)
   end
 
   it "should import domains pending delete" do
     file = fixture '12-22-2012.txt'
     expect {
       Domain.import 'Pending-delete', file
-    }.to change{Domain.all.count}.by(5)
+    }.to change{Domain.count}.by(5)
+  end
+
+  context "as redis record" do
+    before(:each) do
+      (0..9).each { |i| Domain.create id: "#{i}.com", status: 'Pre-release' }
+    end
+    it "should return only 'limit' number of records" do
+      Domain.limit(2).count.should eq 2
+      Domain.limit(2).all.map(&:id).should eq %w[0.com 1.com]
+    end
   end
 end
