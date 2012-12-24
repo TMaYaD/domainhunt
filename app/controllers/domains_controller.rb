@@ -8,7 +8,7 @@ class DomainsController < InheritedResources::Base
 
   def data_table
     total_records = Domain.count
-    total_display_records = collection_without_limit.count
+    total_display_records = Domain.count
 
     render :json => {
       :aaData               => collection,
@@ -22,12 +22,8 @@ protected
     @domains ||= begin
       offset = params[:iDisplayStart].try(:to_i) || 0
       length = params[:iDisplayLength].try(:to_i) || 20
-      collection_without_limit[offset, length]
+      Domain.filter offset, length
     end
-  end
-
-  def collection_without_limit
-    @collection_without_limit ||= Domain.all
   end
 
 end
