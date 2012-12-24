@@ -47,5 +47,19 @@ describe Domain do
       Domain.offset(8).count.should eq 2
       Domain.offset(8).all.map(&:id).should eq %w[8.com 9.com]
     end
+
+    it "should return only 'limit' records starting from 'offset'" do
+      Domain.offset(7).limit(2).count.should eq 2
+      Domain.offset(7).limit(2).all.map(&:id).should eq %w[7.com 8.com]
+
+      Domain.limit(2).offset(7).count.should eq 2
+      Domain.limit(2).offset(7).all.map(&:id).should eq %w[7.com 8.com]
+    end
+
+    it "should not return more records than existing" do
+      Domain.offset(8).limit(3).count.should eq 2
+      Domain.offset(8).limit(3).all.map(&:id).should eq %w[8.com 9.com]
+    end
+
   end
 end
