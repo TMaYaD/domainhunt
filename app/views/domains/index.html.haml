@@ -9,27 +9,21 @@
 
 %h1 Listing domains
 
-%table.table.table-striped
-  %tr
-    %th Name
-    %th Min bid
-    %th Release date
-    %th Auction end date
-    %th Status
-    %th
-    %th
-    %th
-
-  - @domains.each do |domain|
+- columns = Domain.attributes.keys
+%table.table.table-striped.data_tables{data: {source: data_table_domains_path, columns: columns.to_s}}
+  %thead
     %tr
-      %td= domain.id
-      %td= domain.min_bid
-      %td= domain.release_date
-      %td= domain.end_date
-      %td= domain.status
-      %td= link_to 'Show', domain
-      %td= link_to 'Edit', edit_domain_path(domain.id)
-      %td= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' }
+      - columns.each do |c|
+        %th= c.titleize
+
+  %tbody
+    - @domains.each do |domain|
+      %tr
+        %td= domain.id
+        %td= domain.min_bid
+        %td= domain.release_date
+        %td= domain.status
+        %td= domain.end_date
 
 %br
 

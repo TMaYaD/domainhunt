@@ -8,3 +8,7 @@ ActiveSupport.on_load(:action_controller) do
   wrap_parameters format: [:json]
 end
 
+ActiveSupport.on_load(:redis_record) do
+  send :include_root_in_json=, false
+end
+

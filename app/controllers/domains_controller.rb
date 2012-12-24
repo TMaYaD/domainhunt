@@ -5,4 +5,29 @@ class DomainsController < InheritedResources::Base
     Domain.import params[:status], params[:file].path
     redirect_to domains_path, notice: 'Domains imported successfully'
   end
+
+  def data_table
+    total_records = Domain.count
+    total_display_records = collection_without_limit.count
+
+    render :json => {
+      :aaData               => collection,
+      :iTotalDisplayRecords => total_display_records,
+      :iTotalRecords        => total_records
+    }, :content_type => Mime::JSON.to_s
+  end
+
+protected
+  def collection
+    @domains ||= begin
+      offset = params[:iDisplayStart].try(:to_i) || 0
+      length = params[:iDisplayLength].try(:to_i) || 20
+      collection_without_limit[offset, length]
+    end
+  end
+
+  def collection_without_limit
+    @collection_without_limit ||= Domain.all
+  end
+
 end

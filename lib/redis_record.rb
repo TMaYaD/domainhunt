@@ -1,4 +1,5 @@
 require 'active_attr'
+require 'active_support'
 
 class RedisRecord
 
@@ -12,4 +13,5 @@ class RedisRecord
   class_attribute :sorted_indices
   self.sorted_indices = []
 
+  ActiveSupport.run_load_hooks :redis_record, self
 end
