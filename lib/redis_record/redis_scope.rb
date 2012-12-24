@@ -1,6 +1,7 @@
 class RedisScope
   def initialize(model, *args)
     @model = model
+    @offset = 0
   end
 
   # Modifiers
@@ -10,20 +11,34 @@ class RedisScope
     self
   end
 
+  def offset(n)
+    @offset = n
+    self
+  end
+
   # Executors
   def count
-    total_records = REDIS.zcount @model.meta_key(:id), '-inf', '+inf'
-    return total_records unless @limit
+    total_records = REDIS.zcard @model.meta_key(:id)
 
-    [total_records, @limit].min
+    if stop > @offset and stop < total_records
+      return @limit
+    else
+      total_records - @offset
+    end
   end
 
   def all
     ids.map {|id| @model.find id}
   end
+  delegate :first, :last, :to => :all
 
 private
   def ids
-    REDIS.zrange @model.meta_key(:id), 0, @limit - 1
+    REDIS.zrange @model.meta_key(:id), @offset, stop
   end
+
+  def stop
+    @limit ? @offset + @limit -1 : -1
+  end
+
 end

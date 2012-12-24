@@ -5,7 +5,8 @@ module RedisRecord::Base
       RedisScope.new self, *args
     end
 
-    delegate :limit, :to => :scoped
+    delegate :limit, :offset, :to => :scoped
+    delegate :all, :count, :first, :last, :to => :scoped
 
     def create(*args)
       new(*args).save
@@ -20,23 +21,6 @@ module RedisRecord::Base
       attributes['id'] && self.new(attributes).tap { |r| r.persisted = true }
     end
 
-    def all
-      filter
-    end
-
-    def filter(offset=0, length= -1 - offset)
-      filter_ids(offset, offset + length).map { |id| find id }
-    end
-
-    def filter_ids(offset_begin, offset_end)
-      REDIS.zrange meta_key(:id), offset_begin, offset_end
-    end
-
-    def count
-      REDIS.zcount(meta_key(:id), '-inf', '+inf')
-    end
-
-    delegate :first, :last, :to => :all
 
     def find_or_initialize_by_id(id)
       find(id) || self.new(:id => id)
@@ -52,14 +36,6 @@ module RedisRecord::Base
         REDIS.zrange meta_key(attr), offset_begin, offset_end
       end
 
-    end
-
-    def find_ids_and_sort_by(attr, options)
-      REDIS.zrange(meta_key(attr), *options[:limit])
-    end
-
-    def find_ids_and_reverse_sort_by(attr, options)
-      REDIS.zrevrange(meta_key(attr), *options[:limit])
     end
 
     def meta_key(attr)
