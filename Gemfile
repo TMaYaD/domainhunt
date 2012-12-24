@@ -15,7 +15,6 @@ group :assets do
 end
 
 gem 'active_attr'
-gem 'data_tables_responder', :github => 'TMaYaD/data_tables_responder'
 gem 'haml-rails'
 gem 'inherited_resources'
 gem 'jquery-rails'
