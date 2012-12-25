@@ -10,8 +10,8 @@ class RedisRecord
   include Base
 
 
-  class_attribute :sorted_indices, :defined_filters
-  self.sorted_indices = []
+  class_attribute :defined_sorts, :defined_filters
+  self.defined_sorts = {id: nil}
   self.defined_filters = {}
 
   ActiveSupport.run_load_hooks :redis_record, self

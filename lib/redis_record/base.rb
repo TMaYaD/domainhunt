@@ -5,10 +5,20 @@ module RedisRecord::Base
     run_callbacks :save do
       success = REDIS.multi do
         REDIS.mapped_hmset(key, attributes)
-        REDIS.zadd self.class.meta_key(:id), 0, id
-        sorted_indices.each do |attr|
-          REDIS.zadd self.class.meta_key(attr), attributes[attr.to_s], id
+
+        defined_sorts.each do |name, block|
+          score = 0
+          if block
+            if block.respond_to? :call
+              score = block.call self
+            else
+              score = self.send block
+            end
+          end
+
+          REDIS.zadd self.class.meta_key(name), score, id
         end
+
         defined_filters.each do |name, block|
           REDIS.sadd self.class.filter_key(name, block.call(self)), id
         end
@@ -31,9 +41,8 @@ module RedisRecord::Base
   def destroy
     success = REDIS.multi do
       REDIS.del key
-      REDIS.zrem self.class.meta_key(:id), id
-      sorted_indices.each do |attr|
-        REDIS.zrem self.class.meta_key(attr), id
+      defined_sorts.each do |name, _|
+        REDIS.zrem self.class.meta_key(name), id
       end
       defined_filters.each do |name, block|
         REDIS.srem self.class.filter_key(name, block.call(self)), id

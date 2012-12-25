@@ -5,7 +5,7 @@ module RedisRecord::Base
       RedisScope.new self, *args
     end
 
-    delegate :filter, :limit, :offset, :to => :scoped
+    delegate :filter, :sort, :min, :max, :limit, :offset, :to => :scoped
     delegate :all, :count, :first, :last, :to => :scoped
 
     def create(*args)
@@ -26,19 +26,12 @@ module RedisRecord::Base
       find(id) || self.new(:id => id)
     end
 
-    def search_by_range_on(attr)
-      self.sorted_indices.push attr
-      define_singleton_method "find_ids_by_#{attr}" do |min, max|
-        REDIS.zrangebyscore meta_key(attr), min, max
-      end
-
-      define_singleton_method "filter_ids_by_#{attr}" do |offset_begin, offset_end|
-        REDIS.zrange meta_key(attr), offset_begin, offset_end
-      end
-    end
-
     def create_filter(name, &block)
       defined_filters[name] = block
+    end
+
+    def sortable(name, &block)
+      defined_sorts[name] = block
     end
 
     def meta_key(attr)

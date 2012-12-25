@@ -25,6 +25,10 @@ class Domain < RedisRecord
     domain.id.split('.').last
   end
 
+  sortable :length do |domain|
+    domain.id.length
+  end
+
   def self.import(status, path)
     parse_records(path, status) do |row|
       domain = find_or_initialize_by_id row['id']

@@ -39,27 +39,38 @@ describe Domain do
     end
 
     it "should return only 'limit' number of records" do
-      Domain.limit(2).count.should eq 2
       Domain.limit(2).all.map(&:id).should eq %w[0.com 1.com]
     end
 
     it "should return only records starting from 'offset'" do
-      Domain.offset(3).count.should eq 2
       Domain.offset(3).all.map(&:id).should eq %w[3.com 4.com]
     end
 
     it "should return only 'limit' records starting from 'offset'" do
-      Domain.offset(2).limit(2).count.should eq 2
       Domain.offset(2).limit(2).all.map(&:id).should eq %w[2.com 3.com]
 
       # in any order
-      Domain.limit(2).offset(2).count.should eq 2
       Domain.limit(2).offset(2).all.map(&:id).should eq %w[2.com 3.com]
     end
 
     it "should not return more records than existing" do
-      Domain.offset(3).limit(3).count.should eq 2
       Domain.offset(3).limit(3).all.map(&:id).should eq %w[3.com 4.com]
+    end
+
+    context 'with sorting' do
+      before(:each) do
+        (1..4).each {|i| Domain.create id: ('a' * i), status: 'Pre-release'}
+      end
+
+      it "should sort by given attribute" do
+        Domain.sort(:length).map(&:id).should eq %w[a aa aaa aaaa 0.com 1.com 2.com 3.com 4.com]
+      end
+
+      it "should filter for min and max on the sort" do
+        Domain.sort(:length).min(5).map(&:id).should eq %w[0.com 1.com 2.com 3.com 4.com]
+        Domain.sort(:length).max(4).map(&:id).should eq %w[a aa aaa aaaa]
+        Domain.sort(:length).min(2).max(4).map(&:id).should eq %w[aa aaa aaaa]
+      end
     end
 
     context "with filters" do
@@ -73,19 +84,20 @@ describe Domain do
       end
 
       it "should return only records with the given filter applied" do
-        Domain.filter(:numbers).count.should eq 10
         Domain.filter(:numbers).all.map(&:id).should eq %w[0.com 1.com 2.com 3.com 4.com 5-.net 6-.net 7-.net 8-.net 9-.net]
       end
 
       it "should return only records matching all the filters" do
-        Domain.filter(:numbers).filter(:hyphenated).count.should eq 5
         Domain.filter(:numbers).filter(:hyphenated).all.map(&:id).should eq %w[5-.net 6-.net 7-.net 8-.net 9-.net]
       end
 
       it "should return records with the filter matching a custom value" do
-        Domain.filter(:tld, 'net').count.should eq 5
         Domain.filter(:tld, 'net').map(&:id).should eq %w[5-.net 6-.net 7-.net 8-.net 9-.net]
+      end
 
+      it "should sort and select records even when filters are applied" do
+        (1..4).each {|i| Domain.create id: ('a' * i), status: 'Pre-release'}
+        Domain.filter(:numbers, false).sort(:length).min(2).max(4).map(&:id).should eq %w[aa aaa aaaa]
       end
     end
   end

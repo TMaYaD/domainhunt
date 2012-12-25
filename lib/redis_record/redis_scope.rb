@@ -2,7 +2,10 @@ class RedisScope
   def initialize(model, *args)
     @model = model
     @offset = 0
-    @filters = [@model.meta_key(:id)]
+    @filters = []
+    @sort = :id
+    @min = '-inf'
+    @max = '+inf'
   end
 
   # Modifiers
@@ -12,9 +15,24 @@ class RedisScope
     if @model.defined_filters.include? name
       @filters.push @model.filter_key(name, value)
     else
-      raise NameError, ":#{f} isn't in the defined filters"
+      raise NameError, ":#{name} isn't in the defined filters"
     end
 
+    self
+  end
+
+  def sort(attr)
+    @sort = attr
+    self
+  end
+
+  def min(value)
+    @min = value
+    self
+  end
+
+  def max(value)
+    @max = value
     self
   end
 
@@ -30,7 +48,8 @@ class RedisScope
 
   # Executors
   def count
-    total_records = REDIS.zcard zset_key
+    apply_filters
+    total_records = REDIS.zcard temp_key
 
     remaining_records = total_records - @offset
 
@@ -48,12 +67,17 @@ class RedisScope
 
 private
   def ids
-    REDIS.zrangebyscore zset_key, '-inf', '+inf', limit: [@offset, @limit || -1]
+    apply_filters
+    REDIS.zrangebyscore temp_key, @min, @max, limit: [@offset, @limit || -1]
   end
 
-  def zset_key
-    key = @model.meta_key("Temp:Filtered")
-    REDIS.zinterstore key,  @filters
-    key
+  def apply_filters
+    key_sets = [@model.meta_key(@sort)] + @filters
+    weights = [1] + [0] * @filters.count
+    REDIS.zinterstore temp_key, key_sets, weights: weights
+  end
+
+  def temp_key
+    @temp_key ||= @model.meta_key("Temp:Filtered")
   end
 end
