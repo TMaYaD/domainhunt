@@ -65,7 +65,7 @@ describe Domain do
     context "with filters" do
       before(:each) do
         ('a'..'e').each { |i| Domain.create id: "#{i}.com", status: 'Pre-release' }
-        ('5'..'9').each { |i| Domain.create id: "#{i}.net", status: 'Pre-release' }
+        ('5'..'9').each { |i| Domain.create id: "#{i}-.net", status: 'Pre-release' }
       end
 
       it "shouldn't allow undefined filters" do
@@ -74,9 +74,16 @@ describe Domain do
 
       it "should return only records with the given filter applied" do
         Domain.filter(:numbers).count.should eq 10
-        Domain.filter(:numbers).all.map(&:id).should eq %w[0.com 1.com 2.com 3.com 4.com 5.net 6.net 7.net 8.net 9.net]
+        Domain.filter(:numbers).all.map(&:id).should eq %w[0.com 1.com 2.com 3.com 4.com 5-.net 6-.net 7-.net 8-.net 9-.net]
       end
 
+      it "should return only records matching all the filters" do
+        Domain.filter(:numbers, :hyphenated).count.should eq 5
+        Domain.filter(:numbers, :hyphenated).all.map(&:id).should eq %w[5-.net 6-.net 7-.net 8-.net 9-.net]
+
+        Domain.filter(:numbers).filter(:hyphenated).count.should eq 5
+        Domain.filter(:numbers).filter(:hyphenated).all.map(&:id).should eq %w[5-.net 6-.net 7-.net 8-.net 9-.net]
+      end
     end
   end
 end

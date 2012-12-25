@@ -13,7 +13,7 @@ class RedisScope
       if @model.defined_filters.include? f
         @filters.push @model.meta_key("Filter:#{f}")
       else
-        raise NameError, "#{f} isn't in the defined filters"
+        raise NameError, ":#{f} isn't in the defined filters"
       end
     end
     self

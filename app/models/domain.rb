@@ -18,6 +18,9 @@ class Domain < RedisRecord
   create_filter :numbers do |domain|
     !!domain.id.match(/[0-9]/)
   end
+  create_filter :hyphenated do |domain|
+    !!domain.id.match(/-/)
+  end
 
   def self.import(status, path)
     parse_records(path, status) do |row|
