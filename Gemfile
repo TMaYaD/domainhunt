@@ -26,6 +26,8 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'foreman'
   gem 'guard'
+    gem 'rb-inotify' if RUBY_PLATFORM.downcase.include?("linux")
+    gem 'rb-fsevent' if RUBY_PLATFORM.downcase.include?("darwin")
   gem 'guard-bundler'
   gem 'guard-livereload'
   gem 'guard-rspec'

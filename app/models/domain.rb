@@ -15,6 +15,10 @@ class Domain < RedisRecord
   validates :status,  :presence => true,
                       :inclusion => { :in => STATUS_LIST }
 
+  create_filter :numbers do |domain|
+    !!domain.id.match(/[0-9]/)
+  end
+
   def self.import(status, path)
     parse_records(path, status) do |row|
       domain = find_or_initialize_by_id row['id']

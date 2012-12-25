@@ -30,12 +30,12 @@ describe Domain do
 
   context "as redis record" do
     before(:each) do
-      (0..9).each { |i| Domain.create id: "#{i}.com", status: 'Pre-release' }
+      (0..4).each { |i| Domain.create id: "#{i}.com", status: 'Pre-release' }
     end
 
     it "should return all the records" do
-      Domain.count.should eq 10
-      Domain.all.map(&:id).should eq %w[0.com 1.com 2.com 3.com 4.com 5.com 6.com 7.com 8.com 9.com]
+      Domain.count.should eq 5
+      Domain.all.map(&:id).should eq %w[0.com 1.com 2.com 3.com 4.com]
     end
 
     it "should return only 'limit' number of records" do
@@ -44,22 +44,39 @@ describe Domain do
     end
 
     it "should return only records starting from 'offset'" do
-      Domain.offset(8).count.should eq 2
-      Domain.offset(8).all.map(&:id).should eq %w[8.com 9.com]
+      Domain.offset(3).count.should eq 2
+      Domain.offset(3).all.map(&:id).should eq %w[3.com 4.com]
     end
 
     it "should return only 'limit' records starting from 'offset'" do
-      Domain.offset(7).limit(2).count.should eq 2
-      Domain.offset(7).limit(2).all.map(&:id).should eq %w[7.com 8.com]
+      Domain.offset(2).limit(2).count.should eq 2
+      Domain.offset(2).limit(2).all.map(&:id).should eq %w[2.com 3.com]
 
-      Domain.limit(2).offset(7).count.should eq 2
-      Domain.limit(2).offset(7).all.map(&:id).should eq %w[7.com 8.com]
+      # in any order
+      Domain.limit(2).offset(2).count.should eq 2
+      Domain.limit(2).offset(2).all.map(&:id).should eq %w[2.com 3.com]
     end
 
     it "should not return more records than existing" do
-      Domain.offset(8).limit(3).count.should eq 2
-      Domain.offset(8).limit(3).all.map(&:id).should eq %w[8.com 9.com]
+      Domain.offset(3).limit(3).count.should eq 2
+      Domain.offset(3).limit(3).all.map(&:id).should eq %w[3.com 4.com]
     end
 
+    context "with filters" do
+      before(:each) do
+        ('a'..'e').each { |i| Domain.create id: "#{i}.com", status: 'Pre-release' }
+        ('5'..'9').each { |i| Domain.create id: "#{i}.net", status: 'Pre-release' }
+      end
+
+      it "shouldn't allow undefined filters" do
+        expect{Domain.filter(:blah)}.to raise_error NameError
+      end
+
+      it "should return only records with the given filter applied" do
+        Domain.filter(:numbers).count.should eq 10
+        Domain.filter(:numbers).all.map(&:id).should eq %w[0.com 1.com 2.com 3.com 4.com 5.net 6.net 7.net 8.net 9.net]
+      end
+
+    end
   end
 end

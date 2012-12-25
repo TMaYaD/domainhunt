@@ -2,10 +2,23 @@ class RedisScope
   def initialize(model, *args)
     @model = model
     @offset = 0
+    @filters = [@model.meta_key(:id)]
   end
 
   # Modifiers
   # always returns self
+
+  def filter(*filters)
+    filters.each do|f|
+      if @model.defined_filters.include? f
+        @filters.push @model.meta_key("Filter:#{f}")
+      else
+        raise NameError, "#{f} isn't in the defined filters"
+      end
+    end
+    self
+  end
+
   def limit(n)
     @limit = n
     self
@@ -18,27 +31,30 @@ class RedisScope
 
   # Executors
   def count
-    total_records = REDIS.zcard @model.meta_key(:id)
+    total_records = REDIS.zcard zset_key
 
-    if stop > @offset and stop < total_records
-      return @limit
+    remaining_records = total_records - @offset
+
+    if @limit and @limit < remaining_records
+      @limit
     else
-      total_records - @offset
+      remaining_records
     end
   end
 
   def all
     ids.map {|id| @model.find id}
   end
-  delegate :first, :last, :to => :all
+  delegate :first, :last, :each, to: :all
 
 private
   def ids
-    REDIS.zrange @model.meta_key(:id), @offset, stop
+    REDIS.zrangebyscore zset_key, '-inf', '+inf', limit: [@offset, @limit || -1]
   end
 
-  def stop
-    @limit ? @offset + @limit -1 : -1
+  def zset_key
+    key = @model.meta_key("Temp:Filtered")
+    REDIS.zinterstore key,  @filters
+    key
   end
-
 end

@@ -22,7 +22,7 @@ protected
     @domains ||= begin
       offset = params[:iDisplayStart].try(:to_i) || 0
       length = params[:iDisplayLength].try(:to_i) || 20
-      Domain.filter offset, length
+      Domain.offset(offset).limit(length)
     end
   end
 
