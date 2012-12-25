@@ -30,6 +30,11 @@ module RedisRecord::Base
       defined_filters[name] = block
     end
 
+    def values_for_filter(name)
+      n = Domain.filter_key(name, '').length
+      REDIS.keys(Domain.filter_key(name, '*')).map {|v| v[n..-1]}
+    end
+
     def sortable(name, &block)
       defined_sorts[name] = block
     end

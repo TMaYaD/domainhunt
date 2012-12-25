@@ -64,6 +64,7 @@ class RedisScope
     ids.map {|id| @model.find id}
   end
   delegate :first, :last, :each, :map, to: :all
+  delegate :as_json, to: :all
 
 private
   def ids

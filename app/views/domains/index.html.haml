@@ -1,11 +1,29 @@
 - content_for :aside do
   .well
-    %h3 Import Domains
-    = form_tag import_domains_path, multipart: true do |f|
-      = label_tag :status
-      = select_tag :status, options_from_collection_for_select(Domain::STATUS_LIST, 'to_s', 'to_s')
-      = file_field_tag :file
-      = submit_tag 'Import'
+    %h3 Filters
+    = form_tag '#' do |f|
+      .control-group
+        .controls
+          = label_tag :numbers, class: 'checkbox' do
+            = check_box_tag :numbers, true, true
+            Numbers
+      .control-group
+        .controls
+          = label_tag :hyphenated, class: 'checkbox' do
+            = check_box_tag :hyphenated, true, true
+            Hyphenated
+
+      .control-group
+        = label_tag :tld, nil, class: 'control-label'
+        .controls= select_tag :tld, options_from_collection_for_select(Domain.values_for_filter(:tld), 'to_s', 'to_s'), include_blank: true
+
+      = field_set_tag '# of char' do
+        .control-group
+          = label_tag :min, nil, class: 'control-label'
+          .controls= text_field_tag :min
+        .control-group
+          = label_tag :max, nil, class: 'control-label'
+          .controls= text_field_tag :max
 
 %h1 Listing domains
 
@@ -17,14 +35,6 @@
         %th= c.titleize
 
   %tbody
-    - @domains.each do |domain|
-      %tr
-        %td= domain.id
-        %td= domain.min_bid
-        %td= domain.release_date
-        %td= domain.status
-        %td= domain.end_date
-
-%br
-
-= link_to 'New Domain', new_domain_path
+    %tr
+      %td{colspan: columns.count}
+        %p Wait while initializing....
