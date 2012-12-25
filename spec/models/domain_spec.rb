@@ -78,11 +78,14 @@ describe Domain do
       end
 
       it "should return only records matching all the filters" do
-        Domain.filter(:numbers, :hyphenated).count.should eq 5
-        Domain.filter(:numbers, :hyphenated).all.map(&:id).should eq %w[5-.net 6-.net 7-.net 8-.net 9-.net]
-
         Domain.filter(:numbers).filter(:hyphenated).count.should eq 5
         Domain.filter(:numbers).filter(:hyphenated).all.map(&:id).should eq %w[5-.net 6-.net 7-.net 8-.net 9-.net]
+      end
+
+      it "should return records with the filter matching a custom value" do
+        Domain.filter(:tld, 'net').count.should eq 5
+        Domain.filter(:tld, 'net').map(&:id).should eq %w[5-.net 6-.net 7-.net 8-.net 9-.net]
+
       end
     end
   end

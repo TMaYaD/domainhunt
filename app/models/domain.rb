@@ -21,6 +21,9 @@ class Domain < RedisRecord
   create_filter :hyphenated do |domain|
     !!domain.id.match(/-/)
   end
+  create_filter :tld do |domain|
+    domain.id.split('.').last
+  end
 
   def self.import(status, path)
     parse_records(path, status) do |row|

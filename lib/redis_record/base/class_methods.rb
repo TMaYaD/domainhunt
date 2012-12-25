@@ -45,6 +45,10 @@ module RedisRecord::Base
       ['Meta', model_name, attr].join ':'
     end
 
+    def filter_key(name, value)
+      meta_key "Filter:#{name}:#{value}"
+    end
+
     def key(id)
       [model_name, id].join ':'
     end

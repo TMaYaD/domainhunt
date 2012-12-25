@@ -8,14 +8,13 @@ class RedisScope
   # Modifiers
   # always returns self
 
-  def filter(*filters)
-    filters.each do|f|
-      if @model.defined_filters.include? f
-        @filters.push @model.meta_key("Filter:#{f}")
-      else
-        raise NameError, ":#{f} isn't in the defined filters"
-      end
+  def filter(name, value=true)
+    if @model.defined_filters.include? name
+      @filters.push @model.filter_key(name, value)
+    else
+      raise NameError, ":#{f} isn't in the defined filters"
     end
+
     self
   end
 
@@ -45,7 +44,7 @@ class RedisScope
   def all
     ids.map {|id| @model.find id}
   end
-  delegate :first, :last, :each, to: :all
+  delegate :first, :last, :each, :map, to: :all
 
 private
   def ids
