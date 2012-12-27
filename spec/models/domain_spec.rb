@@ -57,6 +57,13 @@ describe Domain do
       Domain.offset(3).limit(3).all.map(&:id).should eq %w[3.com 4.com]
     end
 
+    it "should not display hidden records" do
+      Domain.first.hide
+
+      Domain.filter(:hidden, false).count.should eq 4
+      Domain.filter(:hidden, false).all.map(&:id).should eq %w[1.com 2.com 3.com 4.com]
+    end
+
     context 'with sorting' do
       before(:each) do
         (1..4).each {|i| Domain.create id: ('a' * i), status: 'Pre-release'}

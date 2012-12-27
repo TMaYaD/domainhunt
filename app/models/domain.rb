@@ -4,12 +4,15 @@ class Domain < RedisRecord
   STATUS_LIST = %w(Pre-release Pending-delete Auction)
 
   attr_accessible :id, :min_bid, :release_date, :status, :min_bid_with_unit, :end_date
+  attr_accessible :hidden, :liked
 
-  string   :id # name
-  decimal  :min_bid
-  date     :release_date
-  string   :status
-  datetime :end_date
+  string    :id # name
+  decimal   :min_bid
+  date      :release_date
+  string    :status
+  datetime  :end_date
+  boolean   :hidden, :default => false
+  boolean   :liked, :default => false
 
   validates :id,  :presence => true
   validates :status,  :presence => true,
@@ -25,6 +28,9 @@ class Domain < RedisRecord
     domain.id.split('.').last
   end
 
+  create_filter :hidden
+  create_filter :liked
+
   sortable :length do |domain|
     domain.id.length
   end
@@ -38,6 +44,14 @@ class Domain < RedisRecord
 
   def min_bid_with_unit=(value)
     self.min_bid = value && value[1..-1]
+  end
+
+  def hide
+    update_attributes hidden: true
+  end
+
+  def toggle_like
+    update_attributes liked: !liked
   end
 
 private

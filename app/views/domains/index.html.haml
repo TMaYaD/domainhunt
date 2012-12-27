@@ -31,8 +31,13 @@
 %table.table.table-striped.data_tables{data: {source: data_table_domains_path, columns: columns.to_s}}
   %thead
     %tr
-      - columns.each do |c|
-        %th= c.titleize
+      %th &nbsp;
+      %th Name
+      %th Minimum Bid
+      %th Status
+      %th Release Date
+      %th End Date
+      %th Hide
 
   %tbody
     %tr
