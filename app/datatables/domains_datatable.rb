@@ -1,5 +1,5 @@
 class DomainsDatatable
-  delegate :params, :content_tag, :link_to, :hide_domains_path, :like_domains_path, to: :@view
+  delegate :params, :distance_of_time_in_words_to_now, :content_tag, :link_to, :hide_domains_path, :like_domains_path, to: :@view
 
   def initialize(view)
     @view = view
@@ -23,8 +23,8 @@ private
         domain.id,
         "$#{domain.min_bid}",
         domain.status,
-        domain.release_date,
-        domain.end_date,
+        release_date(domain),
+        end_date(domain),
         hide_link(domain)
       ]
     end
@@ -64,5 +64,13 @@ private
     link_to like_domains_path(name: domain.id), method: :post, remote: true do
       content_tag :i, nil, class: "icon-star#{domain.liked ? '' : '-empty'}"
     end
+  end
+
+  def release_date(domain)
+    domain.release_date ? distance_of_time_in_words_to_now(domain.release_date) : 'n/a'
+  end
+
+  def end_date(domain)
+    domain.end_date ? distance_of_time_in_words_to_now(domain.end_date) : 'n/a'
   end
 end
