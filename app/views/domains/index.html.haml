@@ -13,9 +13,13 @@
             = check_box_tag :hyphenated, true, true
             Hyphenated
 
-      .control-group
-        = label_tag :tld, nil, class: 'control-label'
-        .controls= select_tag :tld, options_from_collection_for_select(Domain.values_for_filter(:tld), 'to_s', 'to_s'), include_blank: true
+      = field_set_tag 'Top Level Domain' do
+        - Domain.values_for_filter(:tld).each do |tld|
+          .control-group
+            .controls
+              = label_tag :tld, class: 'checkbox' do
+                = check_box_tag 'tld[]', tld, true
+                = tld
 
       = field_set_tag '# of char' do
         .control-group

@@ -17,7 +17,7 @@ class RedisScope
 
   def filter(name, value=true)
     raise NameError, ":#{name} isn't in the defined filters" unless @model.defined_filters.include? name
-    new_filters = @options[:filters] + [@model.filter_key(name, value)]
+    new_filters = @options[:filters] + [[name, value]]
 
     chain_scope filters: new_filters
   end
@@ -81,7 +81,18 @@ private
   end
 
   def apply_filters
-    key_sets = [@model.meta_key(@options[:sort])] + @options[:filters]
+    filter_keys = @options[:filters].map do |name, value|
+      if value.is_a? Array
+        values = value
+        union_key = @model.filter_key name, "Union:#{values.join '_'}"
+        value_keys = values.map {|value| @model.filter_key name, value}
+        REDIS.zunionstore union_key, value_keys
+        union_key
+      else
+        @model.filter_key name, value
+      end
+    end
+    key_sets = [@model.meta_key(@options[:sort])] + filter_keys
     weights = [1] + [0] * @options[:filters].count
     REDIS.zinterstore temp_key, key_sets, weights: weights
   end
