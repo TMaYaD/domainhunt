@@ -50,8 +50,9 @@ class Domain < RedisRecord
     update_attributes hidden: true
   end
 
-  def toggle_like
-    update_attributes liked: !liked
+  def toggle_like(state = nil)
+    state ||= !liked
+    update_attributes liked: state
   end
 
   def comment
