@@ -7,7 +7,8 @@ DomainHunt::Application.routes.draw do
     }
   end
 
-  resources :comments, only: [:create]
+  resources :comments, only: :create
+  put 'comments' => 'comments#create' # Hack for best in place
 
   root :to => 'domains#index'
 end

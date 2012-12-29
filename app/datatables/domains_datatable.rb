@@ -1,5 +1,5 @@
 class DomainsDatatable
-  delegate :params, :distance_of_time_in_words_to_now, :content_tag, :link_to, :hide_domains_path, :like_domains_path, :comments_path, :simple_form_for, to: :@view
+  delegate :params, :distance_of_time_in_words_to_now, :content_tag, :link_to, :hide_domains_path, :like_domains_path, :best_in_place, :comments_path, to: :@view
 
   def initialize(view)
     @view = view
@@ -76,8 +76,6 @@ private
   end
 
   def comment_form(domain)
-    simple_form_for domain.comment, url: comments_path(id: domain.id), method: :post do |f|
-      f.input(:body, label: false)
-    end
+    best_in_place domain.comment, :body, path: comments_path(id: domain.id), nil: 'Comment'
   end
 end

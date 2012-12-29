@@ -15,6 +15,7 @@ group :assets do
 end
 
 gem 'active_attr'
+gem 'best_in_place'
 gem 'haml-rails'
 gem 'inherited_resources'
 gem 'jquery-rails'

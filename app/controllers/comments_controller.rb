@@ -1,5 +1,5 @@
 class CommentsController < InheritedResources::Base
-  before_filter :set_id, only: :create
+  before_filter :set_id
   actions :create
 
 private

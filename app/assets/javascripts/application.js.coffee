@@ -16,4 +16,9 @@
 #= require dataTables/jquery.dataTables
 #= require dataTables/jquery.dataTables.bootstrap
 #= require dataTables.scroller
+#= require jquery.purr
+#= require best_in_place
 #= require_tree .
+
+$ ->
+  $('.best_in_place').best_in_place()
