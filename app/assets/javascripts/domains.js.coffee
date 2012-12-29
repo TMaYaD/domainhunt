@@ -23,6 +23,8 @@ $ ->
       formData = $('form').serializeArray()
       $.each formData, (i)->
         aoData.push formData[i]
+    fnDrawCallback: (oSettings) ->
+      $('.best_in_place').best_in_place()
 
       aoData
 

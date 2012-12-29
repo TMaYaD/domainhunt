@@ -76,6 +76,6 @@ private
   end
 
   def comment_form(domain)
-    best_in_place domain.comment, :body, path: comments_path(id: domain.id), nil: 'Comment'
+    best_in_place domain.comment, :body, path: comments_path(id: domain.id), classes: 'icon-edit'
   end
 end

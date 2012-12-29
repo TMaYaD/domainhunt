@@ -14,11 +14,22 @@
  *= require_tree .
  */
 
-.data_tables input {
-  border: none;
-  border-bottom: thin solid #DDD;
-  box-shadow: none;
-  outline: none;
-  background-color: transparent;
+/*
+.best_in_place {
+  display: inline-block;
+  height: 1.5em;
+  min-width: 10em;
+  background-color: rgba(240, 239, 225, 0.8);
+  border-radius: 6px;
 }
-
+*/
+.purr {
+  position: fixed;
+  top: 30px;
+  right: 100px;
+  width: 250px;
+  padding: 20px;
+  background-color: #FCC;
+  border: solid 2px #C66;
+}
+.purr:first-letter { text-transform: uppercase; }
