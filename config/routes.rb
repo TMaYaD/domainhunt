@@ -7,5 +7,7 @@ DomainHunt::Application.routes.draw do
     }
   end
 
+  resources :comments, only: [:create]
+
   root :to => 'domains#index'
 end

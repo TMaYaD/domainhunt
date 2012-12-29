@@ -13,3 +13,12 @@
  *= require_self
  *= require_tree .
  */
+
+.data_tables input {
+  border: none;
+  border-bottom: thin solid #DDD;
+  box-shadow: none;
+  outline: none;
+  background-color: transparent;
+}
+

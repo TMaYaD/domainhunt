@@ -1,4 +1,6 @@
 class DomainsController < InheritedResources::Base
+  actions :index
+
   def data_table
     render json: DomainsDatatable.new(view_context), content_type: Mime::JSON.to_s
   end

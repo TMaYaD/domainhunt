@@ -3,7 +3,7 @@ require 'csv'
 class Domain < RedisRecord
   STATUS_LIST = %w(Pre-release Pending-delete Auction)
 
-  attr_accessible :id, :min_bid, :release_date, :status, :min_bid_with_unit, :end_date
+  attr_accessible :id, :min_bid, :min_bid_with_unit, :release_date, :status, :end_date
   attr_accessible :hidden, :liked
 
   string    :id # name
@@ -52,6 +52,10 @@ class Domain < RedisRecord
 
   def toggle_like
     update_attributes liked: !liked
+  end
+
+  def comment
+    Comment.find_or_initialize_by_id(id)
   end
 
 private

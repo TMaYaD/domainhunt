@@ -1,5 +1,5 @@
 class DomainsDatatable
-  delegate :params, :distance_of_time_in_words_to_now, :content_tag, :link_to, :hide_domains_path, :like_domains_path, to: :@view
+  delegate :params, :distance_of_time_in_words_to_now, :content_tag, :link_to, :hide_domains_path, :like_domains_path, :comments_path, :simple_form_for, to: :@view
 
   def initialize(view)
     @view = view
@@ -25,7 +25,8 @@ private
         domain.status,
         release_date(domain),
         end_date(domain),
-        hide_link(domain)
+        hide_link(domain),
+        comment_form(domain)
       ]
     end
   end
@@ -72,5 +73,11 @@ private
 
   def end_date(domain)
     domain.end_date ? distance_of_time_in_words_to_now(domain.end_date) : 'n/a'
+  end
+
+  def comment_form(domain)
+    simple_form_for domain.comment, url: comments_path(id: domain.id), method: :post do |f|
+      f.input(:body, label: false)
+    end
   end
 end

@@ -10,7 +10,10 @@
 # * :daemonize (default is true) - should the Unicorn server start daemonized?
 # * :config_file (default is "config/unicorn.rb") - the path to the unicorn file
 # * :pid_file (default is "tmp/pids/unicorn.pid") - the path to the unicorn pid file
-guard :unicorn, :daemonize => true
+guard :unicorn, :daemonize => true do
+  watch(%r{app/datatables/.+\.rb$})
+  watch(%r{lib/.+\.rb$})
+end
 
 guard 'livereload' do
   watch(%r{app/views/.+\.(erb|haml|slim)})
@@ -19,6 +22,8 @@ guard 'livereload' do
   watch(%r{config/locales/.+\.yml})
   # Rails Assets Pipeline
   watch(%r{(app|vendor)/assets/\w+/(.+\.(css|js|html)).*})  { |m| "/assets/#{m[2]}" }
+  watch(%r{app/datatables/.+\.rb$})
+  watch(%r{lib/.+\.rb$})
 end
 
 guard 'rspec' do
