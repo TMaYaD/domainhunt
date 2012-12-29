@@ -25,7 +25,12 @@ class Domain < RedisRecord
     !!domain.id.match(/-/)
   end
   create_filter :tld do |domain|
-    domain.id.split('.').last
+    begin
+      tld = PublicSuffix.parse(domain.id).tld
+    rescue
+      tld = '--invalid--'
+    end
+    tld
   end
 
   create_filter :hidden

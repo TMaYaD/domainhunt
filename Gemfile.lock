@@ -129,6 +129,7 @@ GEM
     pry-remote (0.1.6)
       pry (~> 0.9)
       slop (~> 3.0)
+    public_suffix (1.2.0)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -233,6 +234,7 @@ DEPENDENCIES
   less-rails
   pry-rails
   pry-remote
+  public_suffix
   rails (= 3.2.9)
   rb-inotify
   redis
