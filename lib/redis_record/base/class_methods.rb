@@ -6,7 +6,7 @@ module RedisRecord::Base
     end
 
     delegate :filter, :sort, :min, :max, :limit, :offset, :to => :scoped
-    delegate :all, :count, :first, :last, :to => :scoped
+    delegate :all, :each, :map, :count, :first, :last, :to => :scoped
 
     def create(*args)
       new(*args).save

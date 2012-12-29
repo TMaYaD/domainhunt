@@ -15,3 +15,5 @@
 /tmp
 config/database.yml
 db/seeds/*
+db/comments.csv
+db/flags.yml
