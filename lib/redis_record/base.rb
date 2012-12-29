@@ -83,6 +83,7 @@ protected
 private
   def filter_key(name, block)
     value = block ? block.call(self) : self.send(name)
+    REDIS.zincrby self.class.filter_key('_Values', name), 1, value
     self.class.filter_key(name, value)
   end
 

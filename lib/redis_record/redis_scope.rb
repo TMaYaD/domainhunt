@@ -84,7 +84,7 @@ private
     filter_keys = @options[:filters].map do |name, value|
       if value.is_a? Array
         values = value
-        union_key = @model.filter_key name, "Union:#{values.join '_'}"
+        union_key = @model.filter_key "_Union:#{name}", values.join('_')
         value_keys = values.map {|value| @model.filter_key name, value}
         REDIS.zunionstore union_key, value_keys
         union_key
@@ -98,7 +98,7 @@ private
   end
 
   def temp_key
-    @temp_key ||= @model.meta_key("Temp:Filtered")
+    @temp_key ||= @model.meta_key("_Temp:Filtered")
   end
 
 end

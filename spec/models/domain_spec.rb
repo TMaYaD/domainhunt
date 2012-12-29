@@ -99,6 +99,10 @@ describe Domain do
         Domain.filter(:numbers).filter(:hyphenated).all.map(&:id).should eq %w[5-.net 6-.net]
       end
 
+      it "should list out all the available values for a given filter" do
+        Domain.values_for_filter(:tld).should eq %w[net org com]
+      end
+
       it "should return records with the filter matching a custom value" do
         Domain.filter(:tld, 'net').map(&:id).should eq %w[5-.net 6-.net]
       end

@@ -30,8 +30,7 @@ module RedisRecord::Base
     end
 
     def values_for_filter(name)
-      n = Domain.filter_key(name, '').length
-      REDIS.keys(Domain.filter_key(name, '*')).map {|v| v[n..-1]}
+      REDIS.zrange filter_key('_Values', name), 0, -1
     end
 
     def meta_key(attr)

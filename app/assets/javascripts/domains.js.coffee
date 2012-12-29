@@ -12,7 +12,10 @@ $ ->
     sPaginationType: "bootstrap"
     bProcessing: true
     bServerSide: true
-    aaSorting: []
+    aoColumnDefs: [{
+      bSortable: false,
+      aTargets: ['_all']
+    }]
     sAjaxSource: $('.data_tables').data('source')
     iDisplayLength: 20
     bLengthChange: false
