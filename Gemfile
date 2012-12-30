@@ -11,6 +11,7 @@ group :assets do
   gem 'twitter-bootstrap-rails'
     gem 'less-rails'
       gem 'therubyracer'
+        gem 'libv8'
   gem 'uglifier', '>= 1.0.3'
 end
 
@@ -21,6 +22,7 @@ gem 'inherited_resources'
 gem 'jquery-rails'
 gem 'public_suffix'
 gem 'redis'
+gem 'redis-record'
 gem 'simple_form'
 gem 'unicorn'
 

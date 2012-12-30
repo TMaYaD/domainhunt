@@ -1,5 +1,5 @@
 RSpec.configure do |c|
   c.before(:each) do |example|
-    REDIS.flushdb
+    RedisRecord.REDIS.flushdb
   end
 end
